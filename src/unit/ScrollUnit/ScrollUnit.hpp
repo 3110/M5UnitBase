@@ -1,4 +1,6 @@
-#include <M5UnitBase.hpp>
+#pragma once
+
+#include <base/M5UnitBase.hpp>
 
 class ScrollUnit : public M5UnitBase {
 public:
