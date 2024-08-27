@@ -40,3 +40,15 @@ bool M5UnitBase::read(uint8_t reg, uint8_t *data, size_t size) const {
     }
     return true;
 }
+
+bool M5UnitBase::write(uint8_t reg, const uint8_t *data, size_t size) const {
+    if (this->_wire == nullptr || this->_address == 0) {
+        return false;
+    }
+    this->_wire->beginTransmission(this->_address);
+    this->_wire->write(reg);
+    for (size_t i = 0; i < size; ++i) {
+        this->_wire->write(data[i]);
+    }
+    return this->_wire->endTransmission() == 0;
+}

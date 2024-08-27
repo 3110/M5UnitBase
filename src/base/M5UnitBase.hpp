@@ -17,6 +17,7 @@ public:
 
     virtual bool isConnected(void) const;
     virtual bool read(uint8_t reg, uint8_t *data, size_t size) const;
+    virtual bool write(uint8_t reg, const uint8_t *data, size_t size) const;
 
 protected:
     TwoWire *_wire;
