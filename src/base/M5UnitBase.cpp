@@ -35,7 +35,7 @@ bool M5UnitBase::read(uint8_t reg, uint8_t *data, size_t size) const {
     if (this->_wire->requestFrom(this->_address, size) != size) {
         return false;
     }
-    for (size_t i = 0; i < size; i++) {
+    for (size_t i = 0; i < size; ++i) {
         data[i] = this->_wire->read();
     }
     return true;
