@@ -1,5 +1,7 @@
 #include "base/M5UnitBase.hpp"
 
+#include "M5UnitBase.hpp"
+
 M5UnitBase::M5UnitBase(void) : _wire(nullptr), _address(0) {
 }
 
@@ -7,7 +9,10 @@ bool M5UnitBase::begin(TwoWire &wire, uint8_t address, uint8_t sda, uint8_t scl,
                        uint32_t frequency) {
     this->_wire = &wire;
     this->_address = address;
-    this->_wire->begin(sda, scl, frequency);
+    if (!this->_wire->begin(sda, scl, frequency)) {
+        ESP_LOGE("M5UnitBase", "Failed to initialize Wire");
+        return false;
+    }
     return isConnected();
 }
 
@@ -17,6 +22,7 @@ bool M5UnitBase::update(void) {
 
 bool M5UnitBase::isConnected(void) const {
     if (this->_wire == nullptr || this->_address == 0) {
+        ESP_LOGE("M5UnitBase", "begin() is not called");
         return false;
     }
     this->_wire->beginTransmission(this->_address);
@@ -25,14 +31,17 @@ bool M5UnitBase::isConnected(void) const {
 
 bool M5UnitBase::read(uint8_t reg, uint8_t *data, size_t size) const {
     if (this->_wire == nullptr || this->_address == 0) {
+        ESP_LOGE("M5UnitBase", "begin() is not called");
         return false;
     }
     this->_wire->beginTransmission(this->_address);
     this->_wire->write(reg);
-    if (this->_wire->endTransmission() != 0) {
+    if (this->_wire->endTransmission(false) != 0) {
+        ESP_LOGE("M5UnitBase", "Failed to send data to register %d", reg);
         return false;
     }
     if (this->_wire->requestFrom(this->_address, size) != size) {
+        ESP_LOGE("M5UnitBase", "Failed to read data from register %d", reg);
         return false;
     }
     for (size_t i = 0; i < size; ++i) {
@@ -43,6 +52,7 @@ bool M5UnitBase::read(uint8_t reg, uint8_t *data, size_t size) const {
 
 bool M5UnitBase::write(uint8_t reg, const uint8_t *data, size_t size) const {
     if (this->_wire == nullptr || this->_address == 0) {
+        ESP_LOGE("M5UnitBase", "begin() is not called");
         return false;
     }
     this->_wire->beginTransmission(this->_address);

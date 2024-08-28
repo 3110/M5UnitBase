@@ -2,6 +2,7 @@
 
 #include <Arduino.h>
 #include <Wire.h>
+#include <esp_log.h>
 #include <pins_arduino.h>
 
 class M5UnitBase {
@@ -16,10 +17,30 @@ public:
     virtual bool update(void);
 
     virtual bool isConnected(void) const;
+
+protected:
     virtual bool read(uint8_t reg, uint8_t *data, size_t size) const;
     virtual bool write(uint8_t reg, const uint8_t *data, size_t size) const;
 
-protected:
+    template <typename T>
+    inline bool getValue(uint8_t reg, T &value) const {
+        uint8_t data[sizeof(T)];
+        if (!read(reg, data, sizeof(T))) {
+            ESP_LOGE("M5UnitBase", "Failed to read value from register %d",
+                     reg);
+            return false;
+        }
+        value = *reinterpret_cast<T *>(data);
+        return true;
+    }
+
+private:
     TwoWire *_wire;
     uint8_t _address;
 };
+
+inline void forever(void) {
+    while (1) {
+        delay(1000);
+    }
+}
