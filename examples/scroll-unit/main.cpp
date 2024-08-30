@@ -4,7 +4,7 @@ ScrollUnit scroll;
 bool pressed = false;
 
 void setup(void) {
-    if (!scroll.begin(Wire1, ScrollUnit::I2C_ADDRESS, RXD2, TXD2)) {
+    if (!scroll.begin(Wire1, RXD2, TXD2)) {
         forever();
     }
 }

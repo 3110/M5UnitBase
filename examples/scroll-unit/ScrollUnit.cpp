@@ -9,9 +9,9 @@ const char *ScrollUnit::getUnitName(void) const {
     return "ScrollUnit";
 }
 
-bool ScrollUnit::begin(TwoWire &wire, uint8_t address, uint8_t sda, uint8_t scl,
+bool ScrollUnit::begin(TwoWire &wire, uint8_t sda, uint8_t scl, uint8_t address,
                        uint32_t frequency) {
-    return M5UnitBase::begin(wire, address, sda, scl, frequency);
+    return M5UnitBase::begin(wire, sda, scl, address, frequency);
 }
 
 bool ScrollUnit::update(void) {

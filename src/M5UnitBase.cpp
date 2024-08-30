@@ -3,7 +3,7 @@
 M5UnitBase::M5UnitBase(void) : _wire(nullptr), _address(0) {
 }
 
-bool M5UnitBase::begin(TwoWire &wire, uint8_t address, uint8_t sda, uint8_t scl,
+bool M5UnitBase::begin(TwoWire &wire, uint8_t sda, uint8_t scl, uint8_t address,
                        uint32_t frequency) {
     this->_wire = &wire;
     this->_address = address;

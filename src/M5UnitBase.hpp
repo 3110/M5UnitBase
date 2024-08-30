@@ -3,7 +3,6 @@
 #include <Arduino.h>
 #include <Wire.h>
 #include <esp_log.h>
-#include <pins_arduino.h>
 
 class M5UnitBase {
 public:
@@ -12,8 +11,8 @@ public:
     M5UnitBase(void);
     virtual ~M5UnitBase(void) = default;
 
-    virtual bool begin(TwoWire &wire, uint8_t address, uint8_t sda = SDA,
-                       uint8_t scl = SCL, uint32_t frequency = I2C_FREQUENCY);
+    virtual bool begin(TwoWire &wire, uint8_t sda, uint8_t scl, uint8_t address,
+                       uint32_t frequency = I2C_FREQUENCY);
     virtual bool update(void);
 
     virtual bool isConnected(void) const;

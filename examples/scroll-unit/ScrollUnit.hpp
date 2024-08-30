@@ -25,8 +25,8 @@ public:
 
     virtual const char *getUnitName(void) const override;
 
-    virtual bool begin(TwoWire &wire = Wire, uint8_t address = I2C_ADDRESS,
-                       uint8_t sda = SDA, uint8_t scl = SCL,
+    virtual bool begin(TwoWire &wire, uint8_t sda, uint8_t scl,
+                       uint8_t address = I2C_ADDRESS,
                        uint32_t frequency = I2C_FREQUENCY);
     virtual bool update(void);
 
