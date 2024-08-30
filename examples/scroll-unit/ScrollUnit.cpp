@@ -1,4 +1,4 @@
-#include "unit/ScrollUnit/ScrollUnit.hpp"
+#include "ScrollUnit.hpp"
 
 template bool M5UnitBase::getValue<int32_t>(uint8_t, int32_t &) const;
 
