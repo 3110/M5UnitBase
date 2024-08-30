@@ -5,6 +5,10 @@ template bool M5UnitBase::getValue<int32_t>(uint8_t, int32_t &) const;
 ScrollUnit::ScrollUnit(void) : M5UnitBase() {
 }
 
+const char *ScrollUnit::getUnitName(void) const {
+    return "ScrollUnit";
+}
+
 bool ScrollUnit::begin(TwoWire &wire, uint8_t address, uint8_t sda, uint8_t scl,
                        uint32_t frequency) {
     return M5UnitBase::begin(wire, address, sda, scl, frequency);

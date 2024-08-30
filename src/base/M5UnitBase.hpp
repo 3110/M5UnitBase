@@ -18,6 +18,8 @@ public:
 
     virtual bool isConnected(void) const;
 
+    virtual const char *getUnitName(void) const = 0;
+
 protected:
     virtual bool read(uint8_t reg, uint8_t *data, size_t size) const;
     virtual bool write(uint8_t reg, const uint8_t *data, size_t size) const;
@@ -26,7 +28,7 @@ protected:
     inline bool getValue(uint8_t reg, T &value) const {
         uint8_t data[sizeof(T)];
         if (!read(reg, data, sizeof(T))) {
-            ESP_LOGE("M5UnitBase", "Failed to read value from register %d",
+            ESP_LOGE(getUnitName(), "Failed to read value from register %d",
                      reg);
             return false;
         }

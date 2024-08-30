@@ -10,7 +10,7 @@ bool M5UnitBase::begin(TwoWire &wire, uint8_t address, uint8_t sda, uint8_t scl,
     this->_wire = &wire;
     this->_address = address;
     if (!this->_wire->begin(sda, scl, frequency)) {
-        ESP_LOGE("M5UnitBase", "Failed to initialize Wire");
+        ESP_LOGE(getUnitName(), "Failed to initialize Wire");
         return false;
     }
     return isConnected();
@@ -22,7 +22,7 @@ bool M5UnitBase::update(void) {
 
 bool M5UnitBase::isConnected(void) const {
     if (this->_wire == nullptr || this->_address == 0) {
-        ESP_LOGE("M5UnitBase", "begin() is not called");
+        ESP_LOGE(getUnitName(), "begin() is not called");
         return false;
     }
     this->_wire->beginTransmission(this->_address);
@@ -31,17 +31,17 @@ bool M5UnitBase::isConnected(void) const {
 
 bool M5UnitBase::read(uint8_t reg, uint8_t *data, size_t size) const {
     if (this->_wire == nullptr || this->_address == 0) {
-        ESP_LOGE("M5UnitBase", "begin() is not called");
+        ESP_LOGE(getUnitName(), "begin() is not called");
         return false;
     }
     this->_wire->beginTransmission(this->_address);
     this->_wire->write(reg);
     if (this->_wire->endTransmission(false) != 0) {
-        ESP_LOGE("M5UnitBase", "Failed to send data to register %d", reg);
+        ESP_LOGE(getUnitName(), "Failed to send data to register %d", reg);
         return false;
     }
     if (this->_wire->requestFrom(this->_address, size) != size) {
-        ESP_LOGE("M5UnitBase", "Failed to read data from register %d", reg);
+        ESP_LOGE(getUnitName(), "Failed to read data from register %d", reg);
         return false;
     }
     for (size_t i = 0; i < size; ++i) {
@@ -52,7 +52,7 @@ bool M5UnitBase::read(uint8_t reg, uint8_t *data, size_t size) const {
 
 bool M5UnitBase::write(uint8_t reg, const uint8_t *data, size_t size) const {
     if (this->_wire == nullptr || this->_address == 0) {
-        ESP_LOGE("M5UnitBase", "begin() is not called");
+        ESP_LOGE(getUnitName(), "begin() is not called");
         return false;
     }
     this->_wire->beginTransmission(this->_address);

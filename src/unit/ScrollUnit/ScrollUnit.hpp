@@ -22,6 +22,8 @@ public:
     ScrollUnit(void);
     virtual ~ScrollUnit(void) = default;
 
+    virtual const char *getUnitName(void) const override;
+
     virtual bool begin(TwoWire &wire = Wire, uint8_t address = I2C_ADDRESS,
                        uint8_t sda = SDA, uint8_t scl = SCL,
                        uint32_t frequency = I2C_FREQUENCY);
