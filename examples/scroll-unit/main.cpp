@@ -11,9 +11,17 @@ void setup(void) {
     if (!scroll.begin(Wire1, RXD2, TXD2)) {
         forever();
     }
+
+    ScrollUnit::quadrature_direction_t direction =
+        ScrollUnit::quadrature_direction_t::CCW;
+    scroll.setEncoderDirection(direction);
+    ESP_LOGI(TAG, "Encoder Direction: %s",
+             direction == ScrollUnit::quadrature_direction_t::CW ? "AB" : "BA");
+
     scroll.setLED(0, 255, 0);
     scroll.getLED(r, g, b);
     ESP_LOGI(TAG, "LED R: 0x%02X, G: 0x%02X, B: 0x%02X", r, g, b);
+
     scroll.resetEncoderValue();
 }
 

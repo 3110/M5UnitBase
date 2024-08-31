@@ -20,6 +20,13 @@ public:
         I2C_ADDRESS = 0xFF,
     };
 
+    enum class quadrature_direction_t : uint8_t
+    {
+        CW = 0,   // CLOCKWISE
+        CCW = 1,  // COUNTERCLOCKWISE
+        ERROR = 2,
+    };
+
     ScrollUnit(void);
     virtual ~ScrollUnit(void) = default;
 
@@ -42,6 +49,9 @@ public:
 
     virtual bool setLED(uint8_t r, uint8_t g, uint8_t b) const;
     virtual bool getLED(uint8_t &r, uint8_t &g, uint8_t &b) const;
+
+    virtual quadrature_direction_t getEncoderDirection(void) const;
+    virtual bool setEncoderDirection(quadrature_direction_t direction) const;
 
 protected:
     template <typename T>

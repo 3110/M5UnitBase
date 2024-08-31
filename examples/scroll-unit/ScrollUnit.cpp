@@ -73,6 +73,21 @@ bool ScrollUnit::getLED(uint8_t &r, uint8_t &g, uint8_t &b) const {
     return true;
 }
 
+ScrollUnit::quadrature_direction_t ScrollUnit::getEncoderDirection(void) const {
+    uint8_t value = 0;
+    if (!this->getValue<uint8_t>(
+            static_cast<uint8_t>(register_t::ENCODER_AB_BA), value)) {
+        return quadrature_direction_t::ERROR;
+    }
+    return static_cast<quadrature_direction_t>(value);
+}
+
+bool ScrollUnit::setEncoderDirection(quadrature_direction_t direction) const {
+    return this->setValue<uint8_t>(
+        static_cast<uint8_t>(register_t::ENCODER_AB_BA),
+        static_cast<uint8_t>(direction));
+}
+
 bool ScrollUnit::updateEncoderValue(void) {
     int32_t value = 0;
     if (!this->getValue<int32_t>(static_cast<uint8_t>(register_t::ENCODER),
