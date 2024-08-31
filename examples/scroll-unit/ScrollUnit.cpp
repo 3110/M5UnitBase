@@ -88,6 +88,11 @@ bool ScrollUnit::setEncoderDirection(quadrature_direction_t direction) const {
         static_cast<uint8_t>(direction));
 }
 
+uint8_t ScrollUnit::getFirmwareVersion(void) const {
+    uint8_t version = 0;
+    return this->readFirmwareVersion(version) ? version : 0;
+}
+
 bool ScrollUnit::updateEncoderValue(void) {
     int32_t value = 0;
     if (!this->getValue<int32_t>(static_cast<uint8_t>(register_t::ENCODER),

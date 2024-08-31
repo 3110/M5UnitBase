@@ -53,6 +53,8 @@ public:
     virtual quadrature_direction_t getEncoderDirection(void) const;
     virtual bool setEncoderDirection(quadrature_direction_t direction) const;
 
+    virtual uint8_t getFirmwareVersion(void) const;
+
 protected:
     template <typename T>
     struct status_t
