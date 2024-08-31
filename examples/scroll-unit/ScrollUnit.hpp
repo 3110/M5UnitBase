@@ -10,7 +10,7 @@ public:
     {
         ENCODER = 0x10,
         BUTTON = 0x20,
-        RGB_LED = 0x30,
+        RGB_LED = 0x30 + 1,
         RESET = 0x40,
         INC_ENCODER = 0x50,
         ENCODER_AB_BA = 0xFB,
@@ -33,4 +33,5 @@ public:
     virtual bool getEncoderValue(int32_t &value) const;
     virtual bool getIncEncoderValue(int32_t &value) const;
     virtual bool isButtonPressed(bool &pressed) const;
+    virtual bool setLED(uint8_t r, uint8_t g, uint8_t b) const;
 };

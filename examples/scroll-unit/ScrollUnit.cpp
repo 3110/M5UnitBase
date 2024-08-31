@@ -37,3 +37,9 @@ bool ScrollUnit::isButtonPressed(bool &pressed) const {
     pressed = (data & 0x01) == 0x00;
     return true;
 }
+
+bool ScrollUnit::setLED(uint8_t r, uint8_t g, uint8_t b) const {
+    const int32_t rgb = (r << 16) | (g << 8) | b;
+    return this->setValue<int32_t>(static_cast<uint8_t>(register_t::RGB_LED),
+                                   rgb);
+}

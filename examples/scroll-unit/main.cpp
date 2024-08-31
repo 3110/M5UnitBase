@@ -17,6 +17,7 @@ void setup(void) {
     if (!scroll.begin(Wire1, RXD2, TXD2)) {
         forever();
     }
+    scroll.setLED(0, 255, 0);
 }
 
 void loop(void) {

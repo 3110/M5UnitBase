@@ -35,6 +35,11 @@ protected:
         return true;
     }
 
+    template <typename T>
+    inline bool setValue(uint8_t reg, T value) const {
+        return write(reg, reinterpret_cast<const uint8_t *>(&value), sizeof(T));
+    }
+
 private:
     TwoWire *_wire;
     uint8_t _address;
