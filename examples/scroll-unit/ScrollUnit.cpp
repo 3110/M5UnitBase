@@ -4,12 +4,9 @@ template bool M5UnitBase::getValue<int32_t>(uint8_t, int32_t &) const;
 
 ScrollUnit::ScrollUnit(void)
     : M5UnitBase(),
-      _encoderValue(0),
-      _encoderValueUpdated(false),
-      _incEncoderValue(0),
-      _incEncoderValueUpdated(false),
-      _buttonPressed(false),
-      _buttonPressedUpdated(false) {
+      _encoderValue({false, 0}),
+      _incEncoderValue({false, 0}),
+      _buttonPressed({false, false}) {
 }
 
 const char *ScrollUnit::getUnitName(void) const {
@@ -22,18 +19,18 @@ bool ScrollUnit::begin(TwoWire &wire, uint8_t sda, uint8_t scl, uint8_t address,
 }
 
 bool ScrollUnit::update(void) {
-    this->_encoderValueUpdated = this->updateEncoderValue();
-    this->_incEncoderValueUpdated = this->updateIncEncoderValue();
-    this->_buttonPressedUpdated = this->updateButtonPressed();
+    updateEncoderValue();
+    updateIncEncoderValue();
+    updateButtonPressed();
     return true;
 }
 
 int32_t ScrollUnit::getEncoderValue(void) const {
-    return this->_encoderValue;
+    return this->_encoderValue.value;
 }
 
 int32_t ScrollUnit::getIncEncoderValue(void) const {
-    return this->_incEncoderValue;
+    return this->_incEncoderValue.value;
 }
 
 void ScrollUnit::resetEncoderValue(void) const {
@@ -43,19 +40,19 @@ void ScrollUnit::resetEncoderValue(void) const {
 }
 
 bool ScrollUnit::isButtonPressed(void) const {
-    return this->_buttonPressed;
+    return this->_buttonPressed.value;
 }
 
 bool ScrollUnit::isEncoderValueUpdated(void) const {
-    return this->_encoderValueUpdated;
+    return this->_encoderValue.updated;
 }
 
 bool ScrollUnit::isIncEncoderValueUpdated(void) const {
-    return this->_incEncoderValueUpdated;
+    return this->_incEncoderValue.updated;
 }
 
 bool ScrollUnit::isButtonPressedUpdated(void) const {
-    return this->_buttonPressedUpdated;
+    return this->_buttonPressed.updated;
 }
 
 bool ScrollUnit::setLED(uint8_t r, uint8_t g, uint8_t b) const {
@@ -82,11 +79,11 @@ bool ScrollUnit::updateEncoderValue(void) {
                                  value)) {
         return false;
     }
-    if (value != this->_encoderValue) {
-        this->_encoderValue = value;
-        return true;
+    this->_encoderValue.updated = value != this->_encoderValue.value;
+    if (this->_encoderValue.updated) {
+        this->_encoderValue.value = value;
     }
-    return false;
+    return true;
 }
 
 bool ScrollUnit::updateIncEncoderValue(void) {
@@ -95,7 +92,7 @@ bool ScrollUnit::updateIncEncoderValue(void) {
                                  value)) {
         return false;
     }
-    this->_incEncoderValue = value;
+    this->_incEncoderValue = {true, value};
     return true;
 }
 
@@ -106,9 +103,9 @@ bool ScrollUnit::updateButtonPressed(void) {
         return false;
     }
     const bool pressed = (value & 0x01) == 0x00;
-    if (pressed != this->_buttonPressed) {
-        this->_buttonPressed = pressed;
-        return true;
+    this->_buttonPressed.updated = pressed != this->_buttonPressed.value;
+    if (this->_buttonPressed.updated) {
+        this->_buttonPressed.value = pressed;
     }
-    return false;
+    return true;
 }

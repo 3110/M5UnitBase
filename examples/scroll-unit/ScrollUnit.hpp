@@ -44,17 +44,19 @@ public:
     virtual bool getLED(uint8_t &r, uint8_t &g, uint8_t &b) const;
 
 protected:
+    template <typename T>
+    struct status_t
+    {
+        bool updated;
+        T value;
+    };
+
     virtual bool updateEncoderValue(void);
     virtual bool updateIncEncoderValue(void);
     virtual bool updateButtonPressed(void);
 
 private:
-    bool _encoderValueUpdated;
-    int32_t _encoderValue;
-
-    bool _incEncoderValueUpdated;
-    int32_t _incEncoderValue;
-
-    bool _buttonPressedUpdated;
-    bool _buttonPressed;
+    status_t<int32_t> _encoderValue;
+    status_t<int32_t> _incEncoderValue;
+    status_t<bool> _buttonPressed;
 };
