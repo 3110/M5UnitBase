@@ -30,12 +30,31 @@ public:
                        uint32_t frequency = I2C_FREQUENCY);
     virtual bool update(void) override;
 
-    virtual bool getEncoderValue(int32_t &value) const;
-    virtual bool getIncEncoderValue(int32_t &value) const;
-    virtual bool resetEncoderValue(void) const;
+    virtual int32_t getEncoderValue(void) const;
+    virtual int32_t getIncEncoderValue(void) const;
+    virtual void resetEncoderValue(void) const;
 
-    virtual bool isButtonPressed(bool &pressed) const;
+    virtual bool isButtonPressed(void) const;
+
+    virtual bool isEncoderValueUpdated(void) const;
+    virtual bool isIncEncoderValueUpdated(void) const;
+    virtual bool isButtonPressedUpdated(void) const;
 
     virtual bool setLED(uint8_t r, uint8_t g, uint8_t b) const;
     virtual bool getLED(uint8_t &r, uint8_t &g, uint8_t &b) const;
+
+protected:
+    virtual bool updateEncoderValue(void);
+    virtual bool updateIncEncoderValue(void);
+    virtual bool updateButtonPressed(void);
+
+private:
+    bool _encoderValueUpdated;
+    int32_t _encoderValue;
+
+    bool _incEncoderValueUpdated;
+    int32_t _incEncoderValue;
+
+    bool _buttonPressed;
+    bool _buttonPressedUpdated;
 };

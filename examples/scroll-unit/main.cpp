@@ -7,15 +7,6 @@ uint8_t r = 0;
 uint8_t g = 0;
 uint8_t b = 0;
 
-int32_t encoderValue = 0;
-int32_t prevEncoderValue = 0;
-
-int32_t incEncoderValue = 0;
-int32_t prevIncEncoderValue = 0;
-
-bool buttonPressed = false;
-bool prevButtonPressed = false;
-
 void setup(void) {
     if (!scroll.begin(Wire1, RXD2, TXD2)) {
         forever();
@@ -27,25 +18,20 @@ void setup(void) {
 }
 
 void loop(void) {
-    if (scroll.isButtonPressed(buttonPressed) &&
-        prevButtonPressed != buttonPressed) {
-        if (buttonPressed) {
-            ESP_LOGI(TAG, "Button pressed: Reset Encoder Value");
-            scroll.resetEncoderValue();
-        }
-        prevButtonPressed = buttonPressed;
-    }
-    if (scroll.getEncoderValue(encoderValue) &&
-        prevEncoderValue != encoderValue) {
-        ESP_LOGI(TAG, "Encoder Value: %d", encoderValue);
-        prevEncoderValue = encoderValue;
-    }
-    if (scroll.getIncEncoderValue(incEncoderValue) &&
-        prevIncEncoderValue != incEncoderValue) {
+    scroll.update();
+
+    if (scroll.isIncEncoderValueUpdated()) {
+        const int32_t incEncoderValue = scroll.getIncEncoderValue();
         if (incEncoderValue != 0) {
             ESP_LOGI(TAG, "Inc Encoder Value: %d", incEncoderValue);
         }
-        prevIncEncoderValue = incEncoderValue;
-        delay(10);
     }
+    if (scroll.isEncoderValueUpdated()) {
+        ESP_LOGI(TAG, "Encoder Value: %d", scroll.getEncoderValue());
+    }
+    if (scroll.isButtonPressedUpdated() && scroll.isButtonPressed()) {
+        ESP_LOGI(TAG, "Button pressed: Reset Encoder Value");
+        scroll.resetEncoderValue();
+    }
+    delay(10);
 }

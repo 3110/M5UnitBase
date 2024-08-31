@@ -2,7 +2,14 @@
 
 template bool M5UnitBase::getValue<int32_t>(uint8_t, int32_t &) const;
 
-ScrollUnit::ScrollUnit(void) : M5UnitBase() {
+ScrollUnit::ScrollUnit(void)
+    : M5UnitBase(),
+      _encoderValue(0),
+      _encoderValueUpdated(false),
+      _incEncoderValue(0),
+      _incEncoderValueUpdated(false),
+      _buttonPressed(false),
+      _buttonPressedUpdated(false) {
 }
 
 const char *ScrollUnit::getUnitName(void) const {
@@ -15,31 +22,40 @@ bool ScrollUnit::begin(TwoWire &wire, uint8_t sda, uint8_t scl, uint8_t address,
 }
 
 bool ScrollUnit::update(void) {
+    this->_encoderValueUpdated = this->updateEncoderValue();
+    this->_incEncoderValueUpdated = this->updateIncEncoderValue();
+    this->_buttonPressedUpdated = this->updateButtonPressed();
     return true;
 }
 
-bool ScrollUnit::getEncoderValue(int32_t &value) const {
-    return this->getValue<int32_t>(static_cast<uint8_t>(register_t::ENCODER),
-                                   value);
+int32_t ScrollUnit::getEncoderValue(void) const {
+    return this->_encoderValue;
 }
 
-bool ScrollUnit::getIncEncoderValue(int32_t &value) const {
-    return this->getValue<int32_t>(
-        static_cast<uint8_t>(register_t::INC_ENCODER), value);
+int32_t ScrollUnit::getIncEncoderValue(void) const {
+    return this->_incEncoderValue;
 }
 
-bool ScrollUnit::resetEncoderValue(void) const {
-    return this->setValue<uint8_t>(static_cast<uint8_t>(register_t::RESET), 1);
-}
-
-bool ScrollUnit::isButtonPressed(bool &pressed) const {
-    uint8_t data = 0;
-    if (!this->getValue<uint8_t>(static_cast<uint8_t>(register_t::BUTTON),
-                                 data)) {
-        return false;
+void ScrollUnit::resetEncoderValue(void) const {
+    if (!this->setValue<int32_t>(static_cast<uint8_t>(register_t::RESET), 1)) {
+        ESP_LOGE(getUnitName(), "Failed to reset encoder value");
     }
-    pressed = (data & 0x01) == 0x00;
-    return true;
+}
+
+bool ScrollUnit::isButtonPressed(void) const {
+    return this->_buttonPressed;
+}
+
+bool ScrollUnit::isEncoderValueUpdated(void) const {
+    return this->_encoderValueUpdated;
+}
+
+bool ScrollUnit::isIncEncoderValueUpdated(void) const {
+    return this->_incEncoderValueUpdated;
+}
+
+bool ScrollUnit::isButtonPressedUpdated(void) const {
+    return this->_buttonPressedUpdated;
 }
 
 bool ScrollUnit::setLED(uint8_t r, uint8_t g, uint8_t b) const {
@@ -58,4 +74,41 @@ bool ScrollUnit::getLED(uint8_t &r, uint8_t &g, uint8_t &b) const {
     g = (rgb >> 16) & 0xFF;
     b = (rgb >> 24) & 0xFF;
     return true;
+}
+
+bool ScrollUnit::updateEncoderValue(void) {
+    int32_t value = 0;
+    if (!this->getValue<int32_t>(static_cast<uint8_t>(register_t::ENCODER),
+                                 value)) {
+        return false;
+    }
+    if (value != this->_encoderValue) {
+        this->_encoderValue = value;
+        return true;
+    }
+    return false;
+}
+
+bool ScrollUnit::updateIncEncoderValue(void) {
+    int32_t value = 0;
+    if (!this->getValue<int32_t>(static_cast<uint8_t>(register_t::INC_ENCODER),
+                                 value)) {
+        return false;
+    }
+    this->_incEncoderValue = value;
+    return true;
+}
+
+bool ScrollUnit::updateButtonPressed(void) {
+    uint8_t value = 0;
+    if (!this->getValue<uint8_t>(static_cast<uint8_t>(register_t::BUTTON),
+                                 value)) {
+        return false;
+    }
+    const bool pressed = (value & 0x01) == 0x00;
+    if (pressed != this->_buttonPressed) {
+        this->_buttonPressed = pressed;
+        return true;
+    }
+    return false;
 }
