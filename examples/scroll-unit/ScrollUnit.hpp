@@ -10,7 +10,7 @@ public:
     {
         ENCODER = 0x10,
         BUTTON = 0x20,
-        RGB_LED = 0x30 + 1,
+        RGB_LED = 0x30,
         RESET = 0x40,
         INC_ENCODER = 0x50,
         ENCODER_AB_BA = 0xFB,
