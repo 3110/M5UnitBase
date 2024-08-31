@@ -34,4 +34,5 @@ public:
     virtual bool getIncEncoderValue(int32_t &value) const;
     virtual bool isButtonPressed(bool &pressed) const;
     virtual bool setLED(uint8_t r, uint8_t g, uint8_t b) const;
+    virtual bool getLED(uint8_t &r, uint8_t &g, uint8_t &b) const;
 };

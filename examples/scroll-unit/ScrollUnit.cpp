@@ -43,3 +43,15 @@ bool ScrollUnit::setLED(uint8_t r, uint8_t g, uint8_t b) const {
     return this->setValue<int32_t>(static_cast<uint8_t>(register_t::RGB_LED),
                                    rgb);
 }
+
+bool ScrollUnit::getLED(uint8_t &r, uint8_t &g, uint8_t &b) const {
+    int32_t rgb = 0;
+    if (!this->getValue<int32_t>(static_cast<uint8_t>(register_t::RGB_LED),
+                                 rgb)) {
+        return false;
+    }
+    r = (rgb >> 8) & 0xFF;
+    g = (rgb >> 16) & 0xFF;
+    b = (rgb >> 24) & 0xFF;
+    return true;
+}

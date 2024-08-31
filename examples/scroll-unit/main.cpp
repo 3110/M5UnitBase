@@ -2,6 +2,9 @@
 
 const char *TAG = "main";
 ScrollUnit scroll;
+uint8_t r = 0;
+uint8_t g = 0;
+uint8_t b = 0;
 bool pressed = false;
 
 struct encoder_t
@@ -18,6 +21,8 @@ void setup(void) {
         forever();
     }
     scroll.setLED(0, 255, 0);
+    scroll.getLED(r, g, b);
+    ESP_LOGI(TAG, "LED R: 0x%02X, G: 0x%02X, B: 0x%02X", r, g, b);
 }
 
 void loop(void) {
