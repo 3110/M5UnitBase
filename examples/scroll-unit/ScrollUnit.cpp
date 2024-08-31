@@ -15,7 +15,7 @@ bool ScrollUnit::begin(TwoWire &wire, uint8_t sda, uint8_t scl, uint8_t address,
 }
 
 bool ScrollUnit::update(void) {
-    return M5UnitBase::update();
+    return true;
 }
 
 bool ScrollUnit::getEncoderValue(int32_t &value) const {

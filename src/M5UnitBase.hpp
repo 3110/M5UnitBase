@@ -13,7 +13,7 @@ public:
 
     virtual bool begin(TwoWire &wire, uint8_t sda, uint8_t scl, uint8_t address,
                        uint32_t frequency = I2C_FREQUENCY);
-    virtual bool update(void);
+    virtual bool update(void) = 0;
 
     virtual bool isConnected(void) const;
 

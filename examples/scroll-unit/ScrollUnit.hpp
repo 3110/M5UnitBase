@@ -28,7 +28,7 @@ public:
     virtual bool begin(TwoWire &wire, uint8_t sda, uint8_t scl,
                        uint8_t address = I2C_ADDRESS,
                        uint32_t frequency = I2C_FREQUENCY);
-    virtual bool update(void);
+    virtual bool update(void) override;
 
     virtual bool getEncoderValue(int32_t &value) const;
     virtual bool getIncEncoderValue(int32_t &value) const;

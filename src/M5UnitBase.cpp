@@ -14,10 +14,6 @@ bool M5UnitBase::begin(TwoWire &wire, uint8_t sda, uint8_t scl, uint8_t address,
     return isConnected();
 }
 
-bool M5UnitBase::update(void) {
-    return true;
-}
-
 bool M5UnitBase::isConnected(void) const {
     if (this->_wire == nullptr || this->_address == 0) {
         ESP_LOGE(getUnitName(), "begin() is not called");
