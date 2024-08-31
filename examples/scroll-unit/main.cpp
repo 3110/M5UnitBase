@@ -23,11 +23,13 @@ void setup(void) {
     scroll.setLED(0, 255, 0);
     scroll.getLED(r, g, b);
     ESP_LOGI(TAG, "LED R: 0x%02X, G: 0x%02X, B: 0x%02X", r, g, b);
+    scroll.resetEncoderValue();
 }
 
 void loop(void) {
     if (scroll.isButtonPressed(pressed) && pressed) {
-        ESP_LOGI(TAG, "Button pressed");
+        ESP_LOGI(TAG, "Button pressed: Reset Encoder Value");
+        scroll.resetEncoderValue();
     }
     if (scroll.getEncoderValue(encoderValue.value) &&
         encoderValue.prev != encoderValue.value) {

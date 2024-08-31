@@ -28,6 +28,10 @@ bool ScrollUnit::getIncEncoderValue(int32_t &value) const {
         static_cast<uint8_t>(register_t::INC_ENCODER), value);
 }
 
+bool ScrollUnit::resetEncoderValue(void) const {
+    return this->setValue<uint8_t>(static_cast<uint8_t>(register_t::RESET), 1);
+}
+
 bool ScrollUnit::isButtonPressed(bool &pressed) const {
     uint8_t data = 0;
     if (!this->getValue<uint8_t>(static_cast<uint8_t>(register_t::BUTTON),
