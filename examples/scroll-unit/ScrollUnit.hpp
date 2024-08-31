@@ -53,6 +53,7 @@ public:
     virtual quadrature_direction_t getEncoderDirection(void) const;
     virtual bool setEncoderDirection(quadrature_direction_t direction) const;
 
+    virtual uint8_t getBootloaderVersion(void) const;
     virtual uint8_t getFirmwareVersion(void) const;
 
 protected:
@@ -66,6 +67,9 @@ protected:
     virtual bool updateEncoderValue(void);
     virtual bool updateIncEncoderValue(void);
     virtual bool updateButtonPressed(void);
+
+    virtual bool readBootloaderVersion(uint8_t &version) const;
+    virtual bool readFirmwareVersion(uint8_t &version) const;
 
 private:
     status_t<int32_t> _encoderValue;

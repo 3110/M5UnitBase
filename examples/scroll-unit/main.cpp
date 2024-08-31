@@ -11,6 +11,8 @@ void setup(void) {
     if (!scroll.begin(Wire1, RXD2, TXD2)) {
         forever();
     }
+
+    ESP_LOGI(TAG, "Bootloader Version: %d", scroll.getBootloaderVersion());
     ESP_LOGI(TAG, "Firmware Version: %d", scroll.getFirmwareVersion());
 
     ScrollUnit::quadrature_direction_t direction =

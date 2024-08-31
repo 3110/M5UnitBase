@@ -88,6 +88,11 @@ bool ScrollUnit::setEncoderDirection(quadrature_direction_t direction) const {
         static_cast<uint8_t>(direction));
 }
 
+uint8_t ScrollUnit::getBootloaderVersion(void) const {
+    uint8_t version = 0;
+    return this->readBootloaderVersion(version) ? version : 0;
+}
+
 uint8_t ScrollUnit::getFirmwareVersion(void) const {
     uint8_t version = 0;
     return this->readFirmwareVersion(version) ? version : 0;
@@ -128,4 +133,14 @@ bool ScrollUnit::updateButtonPressed(void) {
         this->_buttonPressed.value = pressed;
     }
     return true;
+}
+
+bool ScrollUnit::readBootloaderVersion(uint8_t &version) const {
+    return this->getValue<uint8_t>(
+        static_cast<uint8_t>(register_t::BOOTLOADER_VERSION), version);
+}
+
+bool ScrollUnit::readFirmwareVersion(uint8_t &version) const {
+    return this->getValue<uint8_t>(
+        static_cast<uint8_t>(register_t::FIRMWARE_VERSION), version);
 }
