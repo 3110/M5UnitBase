@@ -55,6 +55,6 @@ private:
     bool _incEncoderValueUpdated;
     int32_t _incEncoderValue;
 
-    bool _buttonPressed;
     bool _buttonPressedUpdated;
+    bool _buttonPressed;
 };
