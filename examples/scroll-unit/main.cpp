@@ -2,19 +2,19 @@
 
 const char *TAG = "main";
 ScrollUnit scroll;
+
 uint8_t r = 0;
 uint8_t g = 0;
 uint8_t b = 0;
-bool pressed = false;
 
-struct encoder_t
-{
-    int32_t value;
-    int32_t prev;
-};
+int32_t encoderValue = 0;
+int32_t prevEncoderValue = 0;
 
-encoder_t encoderValue;
-encoder_t incEncoderValue;
+int32_t incEncoderValue = 0;
+int32_t prevIncEncoderValue = 0;
+
+bool buttonPressed = false;
+bool prevButtonPressed = false;
 
 void setup(void) {
     if (!scroll.begin(Wire1, RXD2, TXD2)) {
@@ -27,21 +27,25 @@ void setup(void) {
 }
 
 void loop(void) {
-    if (scroll.isButtonPressed(pressed) && pressed) {
-        ESP_LOGI(TAG, "Button pressed: Reset Encoder Value");
-        scroll.resetEncoderValue();
-    }
-    if (scroll.getEncoderValue(encoderValue.value) &&
-        encoderValue.prev != encoderValue.value) {
-        ESP_LOGI(TAG, "Encoder Value: %d", encoderValue.value);
-        encoderValue.prev = encoderValue.value;
-    }
-    if (scroll.getIncEncoderValue(incEncoderValue.value) &&
-        incEncoderValue.prev != incEncoderValue.value) {
-        if (incEncoderValue.value != 0) {
-            ESP_LOGI(TAG, "Inc Encoder Value: %d", incEncoderValue.value);
+    if (scroll.isButtonPressed(buttonPressed) &&
+        prevButtonPressed != buttonPressed) {
+        if (buttonPressed) {
+            ESP_LOGI(TAG, "Button pressed: Reset Encoder Value");
+            scroll.resetEncoderValue();
         }
-        incEncoderValue.prev = incEncoderValue.value;
+        prevButtonPressed = buttonPressed;
+    }
+    if (scroll.getEncoderValue(encoderValue) &&
+        prevEncoderValue != encoderValue) {
+        ESP_LOGI(TAG, "Encoder Value: %d", encoderValue);
+        prevEncoderValue = encoderValue;
+    }
+    if (scroll.getIncEncoderValue(incEncoderValue) &&
+        prevIncEncoderValue != incEncoderValue) {
+        if (incEncoderValue != 0) {
+            ESP_LOGI(TAG, "Inc Encoder Value: %d", incEncoderValue);
+        }
+        prevIncEncoderValue = incEncoderValue;
         delay(10);
     }
 }
